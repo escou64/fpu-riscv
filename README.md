@@ -2,6 +2,7 @@
 
 ### Dépendances
 Certains outils sont nécessaires afin de pouvoir réaliser et tester des designs en Chisel.
+Les commandes ci-dessous sont valables pour Ubuntu, pour plus d'informations voir la [page d'installation de Chisel](https://github.com/freechipsproject/chisel3/blob/master/SETUP.md).
 Tout d'abord **Java**:
 
 ```
@@ -22,8 +23,6 @@ Enfin, GtkWave pour visualiser les chronogrammes:
 ```
   sudo apt-get install gtkwave
 ```
-
-Plus d'informations sont présentes sur la [page d'installation de Chisel](https://github.com/freechipsproject/chisel3/blob/master/SETUP.md).
 
 ### Organisation d'un projet
 
@@ -64,7 +63,7 @@ Dans l'exemple Adder, on a donc le choix entre deux tests différents:
   sbt "test:runMain fpu.tools.AdderTest1 --target-dir output"
 ```
 
-On retouve alors les résultats dans le répertoire *output/*.
+On retrouve alors les résultats dans le répertoire *output/*.
 Les chronogrammes correspondants à chaque test se trouvent dans des fichiers *.vcd*.
 Pour les visualiser, il est alors nécessaire d'utiliser l'outil **GtkWave**:
 
@@ -88,7 +87,7 @@ Pour lancer l'exécution des tests, il faut alors utiliser la commande suivante:
 ```
 
 Ici, le répertoire de destination *output* est spécifié directement dans le fichier.
-On retrouve ensuite dans le terminl le résultat des différents tests.
+On retrouve ensuite dans le terminal le résultat des différents tests.
 
 ### Références
 
