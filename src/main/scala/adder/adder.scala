@@ -25,5 +25,9 @@ class Adder(nBit: Int) extends Module {
 
 // Adder Verilog generator (object)
 object Adder extends App {
-  chisel3.Driver.execute(args, () => new Adder(4))
+  chisel3.Driver.execute(args, () => new Adder(5))
+}
+
+object Adder8 extends App {
+  chisel3.Driver.execute(args, () => new Adder(8))
 }
