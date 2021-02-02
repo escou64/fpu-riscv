@@ -1,4 +1,4 @@
-package fpu.tools
+package fpu.example
 
 import chisel3._
 import chisel3.util._

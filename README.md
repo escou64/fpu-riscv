@@ -42,7 +42,7 @@ Pour générer le Verilog correspondant, le format de la commande du terminal es
 Dans l'exemple Adder, il est possible de générer le module Verilog avec la commande suivante:
 
 ```
-  sbt "runMain fpu.tools.Adder --target-dir output"
+  sbt "runMain fpu.example.Adder --target-dir output"
 ```
 
 Dans le répertoire *output/*, on trouve alors un fichier *Adder.v* correspondant au module décrit dans le fichier Chisel.
@@ -59,8 +59,8 @@ Il est possible d'exécuter individuellement un test avec la commande suivante:
 Dans l'exemple Adder, on a donc le choix entre deux tests différents:
 
 ```
-  sbt "test:runMain fpu.tools.AdderTest0 --target-dir output"
-  sbt "test:runMain fpu.tools.AdderTest1 --target-dir output"
+  sbt "test:runMain fpu.example.AdderTest0 --target-dir output"
+  sbt "test:runMain fpu.example.AdderTest1 --target-dir output"
 ```
 
 On retrouve alors les résultats dans le répertoire *output/*.
@@ -83,7 +83,7 @@ Dans le cas de l'exemple Adder, la structure est décrite dans *src/test/scala/a
 Pour lancer l'exécution des tests, il faut alors utiliser la commande suivante:
 
 ```
-  testOnly fpu.tools.UnitTester"
+  testOnly fpu.example.UnitTester"
 ```
 
 Ici, le répertoire de destination *output* est spécifié directement dans le fichier.
