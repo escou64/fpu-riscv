@@ -42,9 +42,6 @@ class RegFile(p : RegFileParams) extends Module{
 
 }
 
-
-
-
 // Adder Verilog generator (object)
 object RegFile extends App {
   chisel3.Driver.execute(args, () => new RegFile(RegFileDefault))
