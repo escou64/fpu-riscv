@@ -5,7 +5,7 @@ import chisel3.util._
 
 class Calculation extends Module{
     val io = IO( new Bundle{
-        val i_op = Input(UInt(3.W))
+        val i_opM = Input(UInt(3.W))
         val i_scr1 = Input(UInt(23.W))
         val i_scr2 = Input(UInt(23.W))
         val i_E1 = Input(UInt(8.W))
@@ -25,7 +25,7 @@ class Calculation extends Module{
     val Alu = Module(new Alu(23))
 
     /* Connections */
-    Alu.io.i_op := io.i_op
+    Alu.io.i_op := io.i_opM
     Alu.io.i_scr1 := io.i_scr1
     Alu.io.i_scr2 := io.i_scr2
 

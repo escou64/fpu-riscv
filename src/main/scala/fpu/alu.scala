@@ -46,11 +46,7 @@ class Alu(nBit: Int) extends Module{
             } 
         }
     }
-    /*
-    when(reg_res < 0.U){ 
-        io.o_N := 1.U
-    } .otherwise{ io.o_N := 0.U}
-*/
+
     // Output connection
     io.o_res := reg_res
 }
