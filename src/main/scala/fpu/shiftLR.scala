@@ -22,7 +22,7 @@ class ShiftLR extends Module{
     val res = io.i_mant
 
     when(io.i_signe === 1.U){
-        res := io.i_exp << io.i_mant
+        res :=  io.i_mant << io.i_exp
     } .otherwise{
         res := io.o_mant >> io.i_exp
     }

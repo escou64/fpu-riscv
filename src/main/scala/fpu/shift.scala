@@ -7,7 +7,6 @@ class Shift extends Module{
     val io = IO(new Bundle{
 
         /* Inputs */
-        val i_en = Input(Bool())
         val i_opE = Input(UInt(3.W))
         val i_opM = Input(UInt(3.W))
         val i_scr1 = Input(Bool())
@@ -16,21 +15,22 @@ class Shift extends Module{
         val i_E2 = Input(SInt(8.W))
         val i_M1 = Input(UInt(23.W))
         val i_M2 = Input(UInt(23.W))
-
         val i_adr_des = Input(UInt(5.W))
+        val i_S = Input(Bool())
+        val i_cd = Input(UInt(1.W))
 
         /* Ouputs */
-        val o_scr1 = Output(UInt(23.W))
-        val o_scr2 = Output(UInt(23.W))
-        val o_sign_diff = Output(Bool())
+        val o_M1 = Output(UInt(23.W))
+        val o_M2 = Output(UInt(23.W))
+        val o_Ne = Output(Bool())
         val o_adr_des = Output(UInt(5.W))
         val o_opM = Output(UInt(3.W))
         val o_E1 = Output(UInt(8.W))
         val o_E2 = Output(UInt(8.W))
-        val o_signe = Output(UInt(1.W))
+        val o_S = Output(Bool())
     })
 
-   /* Composants */
+    /* Composants */
     val Exp_alu = Module(new AluExposant())
     val Shifter = Module(new ShiftLR())
 
@@ -43,21 +43,28 @@ class Shift extends Module{
     Shifter.io.i_exp := Exp_alu.io.o_res
 
     //Programme
+    
+
     when(Exp_alu.io.o_N){
         Shifter.io.i_mant := io.i_M2
     }. otherwise { Shifter.io.i_mant := io.i_M1 }
 
 
     when(Exp_alu.io.o_N){
-        io.o_scr1 := Shifter.io.o_mant
-        io.o_scr2 := io.i_M2
+        io.o_M1 := Shifter.io.o_mant
+        io.o_M2 := io.i_M2
     }. otherwise{
-        io.o_scr1 := io.i_M1
-        io.o_scr2 := Shifter.io.o_mant
+        io.o_M1 := io.i_M1
+        io.o_M2 := Shifter.io.o_mant
     }
+
     
-    io.o_sign_diff := Exp_alu.io.o_N
+    
+    io.o_Ne := Exp_alu.io.o_N
     io.o_adr_des := io.i_adr_des
-    io.o_signe := Exp_alu.io.o_N
+    io.o_S := io.i_S
+    io.o_E1 := io.i_E1
+    io.o_E2 := io.i_E2
+    
 
 }

@@ -13,14 +13,21 @@ class IncDec extends Module{
         val o_E_norm = Output(UInt(8.W))
     })
 
+    val mant = Wire(UInt(23.W))
+    mant := io.i_mant
+    mant := Reverse(mant)
+
+    val position = Wire(UInt(8.W))
+    position := PriorityEncoder(mant)
+
     when(io.i_mant >= 10.U){
         io.o_incDec := 0.U
-        io.o_nbre := 1.U
-        io.o_E_norm := io.i_E + 1.U
+        io.o_nbre := position
+        io.o_E_norm := io.i_E + position
     }. elsewhen(io.i_mant < 1.U){
         io.o_incDec := 1.U
         io.o_nbre := 1.U
-        io.o_E_norm := io.i_E - 1.U
+        io.o_E_norm := io.i_E - position
     }. otherwise{ 
         io.o_incDec := 0.U
         io.o_nbre := 0.U
