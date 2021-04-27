@@ -18,6 +18,8 @@ object RegFileDefault extends RegFileConfig(
     nRegFileWrite = 1
 )
 
+
+
 /* paramètres à l'étage de décalage 
 trait ShiftParams{
     def nShiftS: Int

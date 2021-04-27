@@ -10,6 +10,7 @@ class Write extends Module{
         val i_signe = Input(UInt(1.W))
         val i_E = Input(UInt(8.W))
         val i_adr_des = Input(UInt(5.W))
+        val i_writeEnable = Input(Bool())
 
         //Outputs
         val o_adr_des = Output(UInt(5.W))
@@ -21,8 +22,6 @@ class Write extends Module{
     val Normal = Module(new IncDec())
     val Shifter = Module(new ShiftLR())
 
-   
-
 
     Normal.io.i_mant := io.i_mant
     Normal.io.i_E := io.i_E
@@ -33,5 +32,5 @@ class Write extends Module{
 
     io.o_data := Cat(io.i_signe, Normal.io.o_E_norm, Shifter.io.o_mant)
     io.o_adr_des := io.i_adr_des
-    io.o_writeEnable := true.B
+    io.o_writeEnable := io.i_writeEnable
 }

@@ -7,36 +7,41 @@ class Comparator(nBit: Int) extends Module{
     val io = IO(new Bundle{
         val i_scr1 = Input(UInt(nBit.W))
         val i_scr2 = Input(UInt(nBit.W))
-        val i_inf = Bool()
-        val i_eq = Bool()
-        val i_sup = Bool()
+        val i_inf = Input(UInt(1.W))
+        val i_eq = Input(UInt(1.W))
+        val i_sup = Input(UInt(1.W))
 
-        val o_inf = Bool()
-        val o_eq = Bool()
-        val o_sup = Bool()
+        val o_inf = Output(UInt(1.W))
+        val o_eq = Output(UInt(1.W))
+        val o_sup = Output(UInt(1.W))
     })
 
-    when((io.i_eq === true.B) & (io.i_inf === false.B) & (io.i_sup === false.B)){
-        when(io.i_scr1 < io.i_scr2){
-            io.o_sup := true.B
-            io.o_eq := false.B
-            io.o_inf := false.B
+    when((io.i_eq === 1.U) & (io.i_inf === 0.U) & (io.i_sup === 0.U)){
+        when(io.i_scr1 > io.i_scr2){
+            io.o_sup := 1.U
+            io.o_eq := 0.U
+            io.o_inf := 0.U
         }. elsewhen(io.i_scr1 < io.i_scr2) {
-            io.o_sup := false.B
-            io.o_eq := false.B
-            io.o_inf := true.B
+            io.o_sup := 0.U
+            io.o_eq := 0.U
+            io.o_inf := 1.U
         }. otherwise{
-            io.o_sup := false.B
-            io.o_eq := true.B
-            io.o_inf := false.B
+            io.o_sup := 0.U
+            io.o_eq := 1.U
+            io.o_inf := 0.U
         }
-    }. elsewhen((io.i_eq === false.B) & (io.i_inf === true.B) & (io.i_sup === false.B)){
-        io.o_sup := false.B
-        io.o_eq := false.B
-        io.o_inf := true.B
-    }. elsewhen((io.i_eq === false.B) & (io.i_inf === false.B) & (io.i_sup === true.B)){
-        io.o_sup := false.B
-        io.o_eq := false.B
-        io.o_inf := true.B
+    }. elsewhen((io.i_eq === 0.U) & (io.i_inf === 1.U) & (io.i_sup === 0.U)){
+        io.o_sup := 0.U
+        io.o_eq := 0.U
+        io.o_inf := 1.U
+    }. elsewhen((io.i_eq === 0.U) & (io.i_inf === 0.U) & (io.i_sup === 1.U)){
+        io.o_sup := 1.U
+        io.o_eq := 0.U
+        io.o_inf :=0.U
+    }. otherwise{
+    	io.o_sup := 0.U
+        io.o_eq := 0.U
+        io.o_inf := 0.U
     }
+    
 }

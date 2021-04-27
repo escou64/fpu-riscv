@@ -11,19 +11,20 @@ class Calculation extends Module{
         val i_E1 = Input(UInt(8.W))
         val i_E2 = Input(UInt(8.W))
         val i_signe = Input(UInt(1.W))
-        val i_sign_diff = Input(Bool())
+        val i_sign_diff = Input(UInt(8.W))
+        val i_Ne = Input(Bool())
         val i_adr_des = Input(UInt(5.W))
-        val i_inf = Bool()
-        val i_eq = Bool()
-        val i_sup = Bool()
+        val i_cd = Input(UInt(1.W))
+        val i_inf = Input(UInt(1.W))
+        val i_eq = Input(UInt(1.W))
+        val i_sup = Input(UInt(1.W))
+        val i_writeEnable = Input(Bool())
 
         val o_alu = Output(UInt(23.W))
         val o_signe = Output(UInt(1.W))
         val o_exp = Output(UInt(8.W))
         val o_adr_des = Output(UInt(5.W))
-        val o_inf = Bool()
-        val o_eq = Bool()
-        val o_sup = Bool()
+        val o_writeEnable = Output(Bool())
 
     })
 
@@ -39,14 +40,26 @@ class Calculation extends Module{
     Alu.io.i_sup := io.i_sup
 
     /* Programme */
-    when(io.i_sign_diff){
-        io.o_exp := io.i_E2
-    } .otherwise {  io.o_exp := io.i_E1  }
 
+
+    //choix exposant
+    when(io.i_Ne){
+        when(io.i_cd === 1.U){
+            io.o_exp := io.i_E2
+        }. otherwise{ io.o_exp := io.i_sign_diff}
+    }. otherwise{
+        when(io.i_cd === 1.U){
+            io.o_exp := io.i_E1
+        }. otherwise{ io.o_exp := io.i_sign_diff}
+    }
+
+    // Ajust signe
     io.o_signe := io.i_signe + Alu.io.o_N
+
+    //Output
     io.o_adr_des := io.i_adr_des
-    io.o_inf := Alu.io.o_inf
-    io.o_eq := Alu.io.o_eq
-    io.o_sup := Alu.io.o_sup
+    io.o_writeEnable := io.i_writeEnable
+
+
     
 }
