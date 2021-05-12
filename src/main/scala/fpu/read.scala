@@ -27,11 +27,41 @@ class Read extends Module{
         val o_writeEnable = Output(Bool())
     })
 
+    /* Wire */
     val wire_s1 = Wire(UInt(1.W))
-    wire_s1 := io.i_f1(32)
+    wire_s1 := io.i_f1(31)
 
     val wire_s2 = Wire(UInt(1.W))
-    wire_s2 := io.i_f2(32)
+    wire_s2 := io.i_f2(31)
+
+    val wire_writeEnable = Wire(Bool())
+    wire_writeEnable := false.B
+
+    val wire_M1 = Wire(UInt(23.W))
+    wire_M1 := 0.U
+    
+    val wire_M2 = Wire(UInt(23.W))
+    wire_M2 := 0.U
+
+    val wire_E1 = Wire(UInt(8.W))
+    wire_E1 := 0.U
+    
+    val wire_E2 = Wire(UInt(8.W))
+    wire_E2 := 0.U
+
+    val wire_S = Wire(UInt(1.W))
+    wire_S := 0.U
+    
+    val wire_opM = Wire(UInt(3.W))
+    wire_opM := 0.U
+    
+    val wire_opE = Wire(UInt(3.W))
+    wire_opE := 0.U
+
+    val wire_cd = Wire(UInt(1.W))
+    wire_cd := 0.U
+
+    /* Composant */
 
     val Comparateur = Module(new Comparator(1))
     Comparateur.io.i_inf := 0.U
@@ -44,105 +74,123 @@ class Read extends Module{
     switch(io.i_instruction){
         is(FPUUOP.ADD.U){
             when(wire_s1 === wire_s2){
-                io.o_M1 := io.i_f1(0,22)
-                io.o_M2 := io.i_f2(0,22)
-                io.o_E1 := io.i_f1(23,30)
-                io.o_E2 := io.i_f2(23,30)
+                wire_M1 := io.i_f1(22,0)
+                wire_M2 := io.i_f2(22,0)
+                wire_E1 := io.i_f1(30,23)
+                wire_E2 := io.i_f2(30,23)
 
-                io.o_opM := FPUUOP.ADD.U
-                io.o_opE := FPUUOP.SUB.U
-                io.o_cd := 0.U
-                io.o_S := wire_s1
-                io.o_writeEnable := true.B
+                wire_opM := FPUUOP.ADD.U
+                wire_opE := FPUUOP.SUB.U
+                wire_cd := 1.U
+                wire_S := wire_s1
+                wire_writeEnable := true.B
             }. elsewhen(wire_s1 < wire_s2){
 
-                io.o_M1 := io.i_f1(0,22)
-                io.o_M2 := io.i_f2(0,22)
-                io.o_E1 := io.i_f1(23,30)
-                io.o_E2 := io.i_f2(23,30)
+                wire_M1 := io.i_f1(22,0)
+                wire_M2 := io.i_f2(22,0)
+                wire_E1 := io.i_f1(30,23)
+                wire_E2 := io.i_f2(30,23)
 
-                io.o_opM := FPUUOP.SUB.U
-                io.o_opE := FPUUOP.SUB.U
-                io.o_cd := 0.U
-                io.o_S := 0.U
-                io.o_writeEnable := true.B
+                wire_opM := FPUUOP.SUB.U
+                wire_opE := FPUUOP.SUB.U
+                wire_cd := 1.U
+                wire_S := 0.U
+                wire_writeEnable := true.B
             }. otherwise{
 
-                io.o_M1 := io.i_f2(0,22)
-                io.o_M2 := io.i_f1(0,22)
-                io.o_E1 := io.i_f2(23,30)
-                io.o_E2 := io.i_f1(23,30)
+                wire_M1 := io.i_f2(22,0)
+                wire_M2 := io.i_f1(22,0)
+                wire_E1 := io.i_f2(30,23)
+                wire_E2 := io.i_f1(30,23)
 
-                io.o_opM := FPUUOP.SUB.U
-                io.o_opE := FPUUOP.SUB.U
-                io.o_cd := 0.U
-                io.o_S := 0.U
-                io.o_writeEnable := true.B
+                wire_opM := FPUUOP.SUB.U
+                wire_opE := FPUUOP.SUB.U
+                wire_cd := 1.U
+                wire_S := 0.U
+                wire_writeEnable := true.B
             }
         }
         is(FPUUOP.SUB.U){
              when(wire_s1 === wire_s2){
                 when(wire_s1 === 0.U){
-                    io.o_M1 := io.i_f1(0,22)
-                    io.o_M2 := io.i_f2(0,22)
-                    io.o_E1 := io.i_f1(23,30)
-                    io.o_E2 := io.i_f2(23,30)
+                    wire_M1 := io.i_f1(22,0)
+                    wire_M2 := io.i_f2(22,0)
+                    wire_E1 := io.i_f1(30,23)
+                    wire_E2 := io.i_f2(30,23)
                 }. otherwise{
-                    io.o_M1 := io.i_f2(0,22)
-                    io.o_M2 := io.i_f1(0,22)
-                    io.o_E1 := io.i_f2(23,30)
-                    io.o_E2 := io.i_f1(23,30)
+                    wire_M1 := io.i_f2(22,0)
+                    wire_M2 := io.i_f1(22,0)
+                    wire_E1 := io.i_f2(30,23)
+                    wire_E2 := io.i_f1(30,23)
                 }
-                io.o_opM := FPUUOP.SUB.U
-                io.o_opE := FPUUOP.SUB.U
-                io.o_cd := 0.U
-                io.o_S := 0.U
-                io.o_writeEnable := true.B
+                wire_opM := FPUUOP.SUB.U
+                wire_opE := FPUUOP.SUB.U
+                wire_cd := 1.U
+                wire_S := 0.U
+                wire_writeEnable := true.B
             }. elsewhen(wire_s1 < wire_s2){
-                io.o_M1 := io.i_f1(0,22)
-                io.o_M2 := io.i_f2(0,22)
-                io.o_E1 := io.i_f1(23,30)
-                io.o_E2 := io.i_f2(23,30)
+                wire_M1 := io.i_f1(22,0)
+                wire_M2 := io.i_f2(22,0)
+                wire_E1 := io.i_f1(30,23)
+                wire_E2 := io.i_f2(30,23)
 
-                io.o_opM := FPUUOP.ADD.U
-                io.o_opE := FPUUOP.SUB.U
-                io.o_cd := 0.U
-                io.o_S := 0.U
-                io.o_writeEnable := true.B
+                wire_opM := FPUUOP.ADD.U
+                wire_opE := FPUUOP.SUB.U
+                wire_cd := 1.U
+                wire_S := 0.U
+                wire_writeEnable := true.B
             }. otherwise{
-                io.o_M1 := io.i_f1(0,22)
-                io.o_M2 := io.i_f2(0,22)
-                io.o_E1 := io.i_f1(23,30)
-                io.o_E2 := io.i_f2(23,30)
+                wire_M1 := io.i_f1(22,0)
+                wire_M2 := io.i_f2(22,0)
+                wire_E1 := io.i_f1(30,23)
+                wire_E2 := io.i_f2(30,23)
 
-                io.o_opM := FPUUOP.ADD.U
-                io.o_opE := FPUUOP.SUB.U
-                io.o_cd := 1.U
-                io.o_S := 1.U
-                io.o_writeEnable := true.B
+                wire_opM := FPUUOP.ADD.U
+                wire_opE := FPUUOP.SUB.U
+                wire_cd := 1.U
+                wire_S := 1.U
+                wire_writeEnable := true.B
             }
         }
-        is(FPUUOP.MAX.U){             
-            io.o_opM := FPUUOP.MAX.U
-            io.o_opE := FPUUOP.MAX.U
-            io.o_cd := 1.U
-            io.o_S := 0.U
-            io.o_writeEnable := true.B
+        is(FPUUOP.MAX.U){      
+            wire_M1 := io.i_f1(22,0)
+            wire_M2 := io.i_f2(22,0)
+            wire_E1 := io.i_f1(30,23)
+            wire_E2 := io.i_f2(30,23)
+
+            wire_opM := FPUUOP.MAX.U
+            wire_opE := FPUUOP.MAX.U
+            wire_cd := 0.U
+            wire_S := 0.U
+            wire_writeEnable := true.B
         }
         is(FPUUOP.MIN.U){
-            io.o_opM := FPUUOP.MIN.U
-            io.o_opE := FPUUOP.MIN.U
-            io.o_cd := 1.U
-            io.o_S := 0.U
-            io.o_writeEnable := true.B
+            wire_M1 := io.i_f1(22,0)
+            wire_M2 := io.i_f2(22,0)
+            wire_E1 := io.i_f1(30,23)
+            wire_E2 := io.i_f2(30,23)
+
+            wire_opM := FPUUOP.MIN.U
+            wire_opE := FPUUOP.MIN.U
+            wire_cd := 0.U
+            wire_S := 0.U
+            wire_writeEnable := true.B
         }
     }
 
     io.o_adr_des := io.i_adr_des
-    io.o_SInf := Comparateur.io.o_inf
+    io.o_SInf := Comparateur.io.o_sup
     io.o_SEq := Comparateur.io.o_eq
-    io.o_SSup := Comparateur.io.o_sup
-
+    io.o_SSup := Comparateur.io.o_inf
+    io.o_M1 := wire_M1
+    io.o_M2 := wire_M2
+    io.o_E1 := wire_E1
+    io.o_E2 := wire_E2
+    io.o_S := wire_S
+    io.o_opM := wire_opM
+    io.o_opE := wire_opE
+    io.o_cd := wire_cd
+    io.o_writeEnable := wire_writeEnable
 
     
 }

@@ -19,12 +19,13 @@ class ShiftLR extends Module{
         val o_mant = Output(UInt(23.W))
     })
 
-    val res = io.i_mant
+    val res = Wire(UInt(23.W))
+    res := 0.U
 
     when(io.i_signe === 1.U){
         res :=  io.i_mant << io.i_exp
     } .otherwise{
-        res := io.o_mant >> io.i_exp
+        res := io.i_mant >> io.i_exp
     }
 
     io.o_mant := res

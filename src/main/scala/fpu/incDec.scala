@@ -26,7 +26,7 @@ class IncDec extends Module{
         io.o_E_norm := io.i_E + position
     }. elsewhen(io.i_mant < 1.U){
         io.o_incDec := 1.U
-        io.o_nbre := 1.U
+        io.o_nbre := position
         io.o_E_norm := io.i_E - position
     }. otherwise{ 
         io.o_incDec := 0.U

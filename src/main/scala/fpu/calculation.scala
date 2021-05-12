@@ -59,6 +59,7 @@ class Calculation extends Module{
     //Output
     io.o_adr_des := io.i_adr_des
     io.o_writeEnable := io.i_writeEnable
+    io.o_alu := Alu.io.o_res
 
 
     

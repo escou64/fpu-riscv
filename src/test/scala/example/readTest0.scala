@@ -1,0 +1,230 @@
+package fpu
+
+import chisel3._
+import chisel3.util._
+import chisel3.iotesters
+import chisel3.iotesters.{ChiselFlatSpec, Driver, PeekPokeTester}
+
+class ReadTest0(dut: Read) extends PeekPokeTester(dut){
+  println("** ****************************************")
+  println("**          BEGINNING TEST0 Read           ")
+  println("** ****************************************")
+
+  /* add */
+  //first step
+  // f1 > 0 et f2 > 0
+  poke(dut.io.i_f1, "b00101010100110101000000000000000".U)
+  poke(dut.io.i_f2, "b00001000100010101000110000000000".U)
+  poke(dut.io.i_instruction, FPUUOP.ADD)
+  poke(dut.io.i_adr_des, 3)
+  step(1)
+  expect(dut.io.o_M1, "b00110101000000000000000".U)
+  expect(dut.io.o_M2, "b00010101000110000000000".U)
+  expect(dut.io.o_E1, "b01010101".U)
+  expect(dut.io.o_E2, "b00010001".U)
+  expect(dut.io.o_S, 0)
+  expect(dut.io.o_SInf,0)
+  expect(dut.io.o_SEq, 1)
+  expect(dut.io.o_SSup, 0)
+  expect(dut.io.o_opM, FPUUOP.ADD)
+  expect(dut.io.o_opE, FPUUOP.SUB)
+  expect(dut.io.o_cd, 1)
+  expect(dut.io.o_adr_des, 3)
+  expect(dut.io.o_writeEnable, true.B)
+
+  // second step
+  // f1 > 0 et f2 < 0
+  poke(dut.io.i_f1, "b00101010100110101000000000000000".U)
+  poke(dut.io.i_f2, "b10001000100010101000110000000000".U)
+  poke(dut.io.i_instruction, FPUUOP.ADD)
+  poke(dut.io.i_adr_des, 3)
+  step(1)
+  expect(dut.io.o_M1, "b00110101000000000000000".U)
+  expect(dut.io.o_M2, "b00010101000110000000000".U)
+  expect(dut.io.o_E1, "b01010101".U)
+  expect(dut.io.o_E2, "b00010001".U)
+  expect(dut.io.o_S, 0)
+  expect(dut.io.o_SInf,0)
+  expect(dut.io.o_SEq, 0)
+  expect(dut.io.o_SSup, 1)
+  expect(dut.io.o_opM, FPUUOP.SUB)
+  expect(dut.io.o_opE, FPUUOP.SUB)
+  expect(dut.io.o_cd, 1)
+  expect(dut.io.o_adr_des, 3)
+  expect(dut.io.o_writeEnable, true.B)
+
+  // third step
+  // f1 < 0 et f2 > 0
+  poke(dut.io.i_f1, "b10101010100110101000000000000000".U)
+  poke(dut.io.i_f2, "b00001000100010101000110000000000".U)
+  poke(dut.io.i_instruction, FPUUOP.ADD)
+  poke(dut.io.i_adr_des, 3)
+  step(1)
+  expect(dut.io.o_M1, "b00010101000110000000000".U)
+  expect(dut.io.o_M2, "b00110101000000000000000".U)
+  expect(dut.io.o_E1, "b00010001".U)
+  expect(dut.io.o_E2, "b01010101".U)
+  expect(dut.io.o_S, 0)
+  expect(dut.io.o_SInf,1)
+  expect(dut.io.o_SEq, 0)
+  expect(dut.io.o_SSup, 0)
+  expect(dut.io.o_opM, FPUUOP.SUB)
+  expect(dut.io.o_opE, FPUUOP.SUB)
+  expect(dut.io.o_cd, 1)
+  expect(dut.io.o_adr_des, 3)
+  expect(dut.io.o_writeEnable, true.B)
+
+  //fourth step
+  // f1 < 0 et f2 < 0
+  poke(dut.io.i_f1, "b10101010100110101000000000000000".U)
+  poke(dut.io.i_f2, "b10001000100010101000110000000000".U)
+  poke(dut.io.i_instruction, FPUUOP.ADD)
+  poke(dut.io.i_adr_des, 3)
+  step(1)
+  expect(dut.io.o_M1, "b00110101000000000000000".U)
+  expect(dut.io.o_M2, "b00010101000110000000000".U)
+  expect(dut.io.o_E1, "b01010101".U)
+  expect(dut.io.o_E2, "b00010001".U)
+  expect(dut.io.o_S, 1)
+  expect(dut.io.o_SInf,0)
+  expect(dut.io.o_SEq, 1)
+  expect(dut.io.o_SSup, 0)
+  expect(dut.io.o_opM, FPUUOP.ADD)
+  expect(dut.io.o_opE, FPUUOP.SUB)
+  expect(dut.io.o_cd, 1)
+  expect(dut.io.o_adr_des, 3)
+  expect(dut.io.o_writeEnable, true.B)
+
+  /* sub */
+  //5eme step
+  // f1 > 0 et f2 > 0
+  poke(dut.io.i_f1, "b00101010100110101000000000000000".U)
+  poke(dut.io.i_f2, "b00001000100010101000110000000000".U)
+  poke(dut.io.i_instruction, FPUUOP.SUB)
+  poke(dut.io.i_adr_des, 3)
+  step(1)
+  expect(dut.io.o_M1, "b00110101000000000000000".U)
+  expect(dut.io.o_M2, "b00010101000110000000000".U)
+  expect(dut.io.o_E1, "b01010101".U)
+  expect(dut.io.o_E2, "b00010001".U)
+  expect(dut.io.o_S, 0)
+  expect(dut.io.o_SInf,0)
+  expect(dut.io.o_SEq, 1)
+  expect(dut.io.o_SSup, 0)
+  expect(dut.io.o_opM, FPUUOP.SUB)
+  expect(dut.io.o_opE, FPUUOP.SUB)
+  expect(dut.io.o_cd, 1)
+  expect(dut.io.o_adr_des, 3)
+  expect(dut.io.o_writeEnable, true.B)
+
+  // 6eme step
+  // f1 > 0 et f2 < 0
+  poke(dut.io.i_f1, "b00101010100110101000000000000000".U)
+  poke(dut.io.i_f2, "b10001000100010101000110000000000".U)
+  poke(dut.io.i_instruction, FPUUOP.SUB)
+  poke(dut.io.i_adr_des, 3)
+  step(1)
+  expect(dut.io.o_M1, "b00110101000000000000000".U)
+  expect(dut.io.o_M2, "b00010101000110000000000".U)
+  expect(dut.io.o_E1, "b01010101".U)
+  expect(dut.io.o_E2, "b00010001".U)
+  expect(dut.io.o_S, 0)
+  expect(dut.io.o_SInf,0)
+  expect(dut.io.o_SEq, 0)
+  expect(dut.io.o_SSup, 1)
+  expect(dut.io.o_opM, FPUUOP.ADD)
+  expect(dut.io.o_opE, FPUUOP.SUB)
+  expect(dut.io.o_cd, 1)
+  expect(dut.io.o_adr_des, 3)
+  expect(dut.io.o_writeEnable, true.B)
+
+  // 7eme step
+  // f1 < 0 et f2 > 0
+  poke(dut.io.i_f1, "b10101010100110101000000000000000".U)
+  poke(dut.io.i_f2, "b00001000100010101000110000000000".U)
+  poke(dut.io.i_instruction, FPUUOP.SUB)
+  poke(dut.io.i_adr_des, 3)
+  step(1)
+  expect(dut.io.o_M1, "b00110101000000000000000".U)
+  expect(dut.io.o_M2, "b00010101000110000000000".U)
+  expect(dut.io.o_E1, "b01010101".U)
+  expect(dut.io.o_E2, "b00010001".U)
+  expect(dut.io.o_S, 1)
+  expect(dut.io.o_SInf,1)
+  expect(dut.io.o_SEq, 0)
+  expect(dut.io.o_SSup, 0)
+  expect(dut.io.o_opM, FPUUOP.ADD)
+  expect(dut.io.o_opE, FPUUOP.SUB)
+  expect(dut.io.o_cd, 1)
+  expect(dut.io.o_adr_des, 3)
+  expect(dut.io.o_writeEnable, true.B)
+
+  //8eme step
+  // f1 < 0 et f2 < 0
+  poke(dut.io.i_f1, "b10101010100110101000000000000000".U)
+  poke(dut.io.i_f2, "b10001000100010101000110000000000".U)
+  poke(dut.io.i_instruction, FPUUOP.SUB)
+  poke(dut.io.i_adr_des, 3)
+  step(1)
+  expect(dut.io.o_M1, "b00010101000110000000000".U)
+  expect(dut.io.o_M2, "b00110101000000000000000".U)
+  expect(dut.io.o_E1, "b00010001".U)
+  expect(dut.io.o_E2, "b01010101".U)
+  expect(dut.io.o_S, 0)
+  expect(dut.io.o_SInf,0)
+  expect(dut.io.o_SEq, 1)
+  expect(dut.io.o_SSup, 0)
+  expect(dut.io.o_opM, FPUUOP.SUB)
+  expect(dut.io.o_opE, FPUUOP.SUB)
+  expect(dut.io.o_cd, 1)
+  expect(dut.io.o_adr_des, 3)
+  expect(dut.io.o_writeEnable, true.B)
+
+  /* MIN */
+  poke(dut.io.i_f1, "b10101010100110101000000000000000".U)
+  poke(dut.io.i_f2, "b00001000100010101000110000000000".U)
+  poke(dut.io.i_instruction, FPUUOP.MIN)
+  poke(dut.io.i_adr_des, 3)
+  step(1)
+  expect(dut.io.o_M1, "b00110101000000000000000".U)
+  expect(dut.io.o_M2, "b00010101000110000000000".U)
+  expect(dut.io.o_E1, "b01010101".U)
+  expect(dut.io.o_E2, "b00010001".U)
+  expect(dut.io.o_S, 0)
+  expect(dut.io.o_SInf,1)
+  expect(dut.io.o_SEq, 0)
+  expect(dut.io.o_SSup, 0)
+  expect(dut.io.o_opM, FPUUOP.MIN)
+  expect(dut.io.o_opE, FPUUOP.MIN)
+  expect(dut.io.o_cd, 0)
+  expect(dut.io.o_adr_des, 3)
+  expect(dut.io.o_writeEnable, true.B)
+
+  /* MAX */
+  poke(dut.io.i_f1, "b10101010100110101000000000000000".U)
+  poke(dut.io.i_f2, "b00001000100010101000110000000000".U)
+  poke(dut.io.i_instruction, FPUUOP.MAX)
+  poke(dut.io.i_adr_des, 3)
+  step(1)
+  expect(dut.io.o_M1, "b00110101000000000000000".U)
+  expect(dut.io.o_M2, "b00010101000110000000000".U)
+  expect(dut.io.o_E1, "b01010101".U)
+  expect(dut.io.o_E2, "b00010001".U)
+  expect(dut.io.o_S, 0)
+  expect(dut.io.o_SInf,1)
+  expect(dut.io.o_SEq, 0)
+  expect(dut.io.o_SSup, 0)
+  expect(dut.io.o_opM, FPUUOP.MAX)
+  expect(dut.io.o_opE, FPUUOP.MAX)
+  expect(dut.io.o_cd, 0)
+  expect(dut.io.o_adr_des, 3)
+  expect(dut.io.o_writeEnable, true.B)
+
+}
+
+// ReadTest0 execution (object)
+object ReadTest0 extends App {
+  iotesters.Driver.execute(args, () => new Read()) {
+    dut => new ReadTest0(dut)
+  }
+}

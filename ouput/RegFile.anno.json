@@ -1,0 +1,38 @@
+[
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RegFile|RegFile>io_b_rport_0_data",
+    "sources":[
+      "~RegFile|RegFile>io_b_rport_0_addr"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RegFile|RegFile>io_b_rport_1_data",
+    "sources":[
+      "~RegFile|RegFile>io_b_rport_1_addr"
+    ]
+  },
+  {
+    "class":"logger.LogLevelAnnotation",
+    "globalLogLevel":{
+      
+    }
+  },
+  {
+    "class":"firrtl.options.TargetDirAnnotation",
+    "directory":"ouput"
+  },
+  {
+    "class":"firrtl.EmitCircuitAnnotation",
+    "emitter":"firrtl.VerilogEmitter"
+  },
+  {
+    "class":"firrtl.options.OutputAnnotationFileAnnotation",
+    "file":"RegFile"
+  },
+  {
+    "class":"firrtl.transforms.BlackBoxTargetDirAnno",
+    "targetDir":"ouput"
+  }
+]
